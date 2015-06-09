@@ -1087,10 +1087,38 @@ uint256 static GetOrphanRoot(const CBlockHeader* pblock)
 
 int64 static GetBlockValue(int nHeight, int64 nFees)
 {
-    int64 nSubsidy = 50 * COIN;
+    int64 nSubsidy = 1000 * COIN;
 
-    // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
-    nSubsidy >>= (nHeight / 840000); // Litecoin: 840k blocks in ~4 years
+    if(pindexBest->nHeight < 101)
+    {
+        nSubsidy = 100000 * COIN;
+    }
+        else if(pindexBest->nHeight < 700)
+    {
+        nSubsidy = 500 * COIN;
+    }
+        else if(pindexBest->nHeight < 1000)
+    {
+        nSubsidy = 450 * COIN;
+    }
+        else if(pindexBest->nHeight < 1600)
+    {
+        nSubsidy = 400 * COIN;
+    }
+        else if(pindexBest->nHeight < 2200)
+    {
+        nSubsidy = 300 * COIN;
+    }
+        else if(pindexBest->nHeight < 2800)
+    {
+        nSubsidy = 200 * COIN;
+    }
+        else if(pindexBest->nHeight < 3400)
+    {
+        nSubsidy = 100 * COIN;
+    }
+    if (fDebug && GetBoolArg("-printcreation"))
+        printf("GetProofOfWorkReward() : create=%s nSubsidy=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nSubsidy);
 
     return nSubsidy + nFees;
 }
